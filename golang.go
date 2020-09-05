@@ -2,51 +2,95 @@ package main
 
 import "fmt"
 
-func zeroval(ival int) {
-	/**
-	 * ====================================================================
-	 * We'll show how pointers work in contrast to values with 2 function:
-	 * zeroval and zeroptr. zeroval has an int parameter, so arguments will
-	 * be passed to it by value. zeroval will get a copy of ival distinct
-	 * from the on in the calling function.
-	 * ====================================================================
-	 */
-	ival = 0
+/**
+ * ============================================================
+ * This person struct type has name and age fields.
+ * ============================================================
+ */
+type person struct {
+	name string
+	age  int
 }
 
-func zeroptr(iptr *int) {
+func newPerson(name string) *person {
 	/**
-	 * ====================================================================
-	 * zeroptr in contrast has an *int parameter, meaning that it takes an
-	 * int pointer. The *iptr code in the function body then dereferences
-	 * the pointer from its memory address to current value at that address.
-	 * Assigning a valur a dereferenced pointer changes the value at the
-	 * referenced address.
-	 * ====================================================================
+	 * ============================================================
+	 * You can safely return a pointer to local variable as a local
+	 * variable will survive the scope of the funtion.
+	 * ============================================================
 	 */
-	*iptr = 0
+	p := person{name: name}
+	p.age = 42
+	return &p
 }
 
 func main() {
-	i := 1
-	fmt.Println("initial:", i)
+	/**
+	 * ============================================================
+	 * This syntax creates a new struct.
+	 * ============================================================
+	 */
+	fmt.Println(person{"Bob", 42})
 
-	zeroval(i)
-	fmt.Println("zeroval:", i)
+	fmt.Println("=================================================")
 
 	/**
-	 * ====================================================================
-	 * the &i syntax gives the memory address of i, i.e. a pointer
-	 * to i.
-	 * ====================================================================
+	 * ============================================================
+	 * You can name the field when initializing a struct.
+	 * ============================================================
 	 */
-	zeroptr(&i)
-	fmt.Println("zeroptr:", i)
+	fmt.Println(person{name: "Alice", age: 30})
+
+	fmt.Println("=================================================")
 
 	/**
-	 * ====================================================================
-	 * Pointer can be printed too.
-	 * ====================================================================
+	 * ============================================================
+	 * Omitted field will be zero-value.
+	 * ============================================================
 	 */
-	fmt.Println("pointer:", &i)
+	fmt.Println(person{name: "Fred"})
+
+	fmt.Println("=================================================")
+
+	/**
+	 * ============================================================
+	 * An & prefix yields a pointer to the struct.
+	 * ============================================================
+	 */
+	fmt.Println(&person{name: "Ann", age: 40})
+
+	fmt.Println("=================================================")
+
+	/**
+	 * ============================================================
+	 * It's idiomatic to encapsulate a new struct creation in
+	 * constructor functions.
+	 * ============================================================
+	 */
+	fmt.Println(newPerson("John"))
+
+	fmt.Println("=================================================")
+
+	/**
+	 * ============================================================
+	 * Access struct fields with a dot.
+	 * ============================================================
+	 */
+	s := person{name: "Sean", age: 50}
+	fmt.Println(s.name)
+
+	fmt.Println("=================================================")
+
+	/**
+	 * ============================================================
+	 * You can also use dots with struct pointers - The pointers
+	 * are automatically derefenced.
+	 *
+	 * Struct are mutable.
+	 * ============================================================
+	 */
+	sp := &s
+	fmt.Println(sp.age)
+	sp.age = 51
+	fmt.Println(sp.age)
 }
