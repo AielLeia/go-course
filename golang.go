@@ -3,41 +3,33 @@ package main
 import "fmt"
 
 /**
- * =============================================================
- * Here's a function that takes two 'int's and returns their
- * sum as an int.
- * =============================================================
+ * ====================================================================
+ * The '(int, int)' in this function signature showns that the call
+ * fucntion returns 2 'int's
+ * ====================================================================
  */
-func plus(a int, b int) int {
-	/**
-	 * =============================================================
-	 * Go requires explicit returns, i.e it won't automactilly
-	 * return the value of the last expression.
-	 * =============================================================
-	 */
-	return a + b
-}
-
-/**
- * =============================================================
- * When you have multiple consecutive parameters of the same
- * type, you may omit the type name for the like-typed
- * parameters up to the final parameter that declares the types.
- * =============================================================
- */
-func plusPlus(a, b, c int) int {
-	return a + b + c
+func vals() (int, int) {
+	return 3, 7
 }
 
 func main() {
 	/**
-	 * =============================================================
-	 * Call a function juste as you'd expect, with 'name(args)'
-	 * =============================================================
+	 * ====================================================================
+	 * here we use the 2 different return value from the call with
+	 * multiple assignment.
+	 * ====================================================================
 	 */
-	res := plus(1, 2)
-	fmt.Println("1 + 2 = ", res)
+	a, b := vals()
+	fmt.Println(a, b)
 
-	res = plusPlus(1, 2, 3)
-	fmt.Println("1 + 2 + 3 = ", res)
+	fmt.Println("================================================================")
+
+	/**
+	 * ====================================================================
+	 * If you only want a subset of the returned values, use the blank
+	 * identifier _.
+	 * ====================================================================
+	 */
+	_, c := vals()
+	fmt.Println(c)
 }
