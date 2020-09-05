@@ -4,32 +4,36 @@ import "fmt"
 
 /**
  * ====================================================================
- * The '(int, int)' in this function signature showns that the call
- * fucntion returns 2 'int's
+ * Here's a function that will take an arbitrary number of 'int's
+ * as arguments.
  * ====================================================================
  */
-func vals() (int, int) {
-	return 3, 7
+func sum(nums ...int) {
+	fmt.Print(nums, " ")
+	total := 0
+	for _, num := range nums {
+		total += num
+	}
+	fmt.Println(total)
 }
 
 func main() {
 	/**
 	 * ====================================================================
-	 * here we use the 2 different return value from the call with
-	 * multiple assignment.
+	 * Variadic functions can be called in the usual way with individual
+	 * arguments.
 	 * ====================================================================
 	 */
-	a, b := vals()
-	fmt.Println(a, b)
+	sum(1, 2)
+	sum(1, 2, 3)
 
-	fmt.Println("================================================================")
-
+	fmt.Println("========================================================")
 	/**
 	 * ====================================================================
-	 * If you only want a subset of the returned values, use the blank
-	 * identifier _.
+	 * If you already have multiple args in a slicen apply them to a
+	 * variadic function using 'func(slice...)'
 	 * ====================================================================
 	 */
-	_, c := vals()
-	fmt.Println(c)
+	nums := []int{1, 2, 3, 4}
+	sum(nums...)
 }
