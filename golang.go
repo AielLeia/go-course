@@ -2,19 +2,51 @@ package main
 
 import "fmt"
 
-func fact(n int) int {
+func zeroval(ival int) {
 	/**
-	 * ============================================================
-	 * This 'fact' function calls itself until it reaches the base
-	 * case of 'fact(0)'
-	 * ============================================================
+	 * ====================================================================
+	 * We'll show how pointers work in contrast to values with 2 function:
+	 * zeroval and zeroptr. zeroval has an int parameter, so arguments will
+	 * be passed to it by value. zeroval will get a copy of ival distinct
+	 * from the on in the calling function.
+	 * ====================================================================
 	 */
-	if n == 0 {
-		return 1
-	}
-	return n * fact(n-1)
+	ival = 0
+}
+
+func zeroptr(iptr *int) {
+	/**
+	 * ====================================================================
+	 * zeroptr in contrast has an *int parameter, meaning that it takes an
+	 * int pointer. The *iptr code in the function body then dereferences
+	 * the pointer from its memory address to current value at that address.
+	 * Assigning a valur a dereferenced pointer changes the value at the
+	 * referenced address.
+	 * ====================================================================
+	 */
+	*iptr = 0
 }
 
 func main() {
-	fmt.Println(fact(7))
+	i := 1
+	fmt.Println("initial:", i)
+
+	zeroval(i)
+	fmt.Println("zeroval:", i)
+
+	/**
+	 * ====================================================================
+	 * the &i syntax gives the memory address of i, i.e. a pointer
+	 * to i.
+	 * ====================================================================
+	 */
+	zeroptr(&i)
+	fmt.Println("zeroptr:", i)
+
+	/**
+	 * ====================================================================
+	 * Pointer can be printed too.
+	 * ====================================================================
+	 */
+	fmt.Println("pointer:", &i)
 }
