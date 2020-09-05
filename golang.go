@@ -2,95 +2,49 @@ package main
 
 import "fmt"
 
-/**
- * ============================================================
- * This person struct type has name and age fields.
- * ============================================================
- */
-type person struct {
-	name string
-	age  int
+type rect struct {
+	width, height int
 }
 
-func newPerson(name string) *person {
-	/**
-	 * ============================================================
-	 * You can safely return a pointer to local variable as a local
-	 * variable will survive the scope of the funtion.
-	 * ============================================================
-	 */
-	p := person{name: name}
-	p.age = 42
-	return &p
+/**
+ * =================================================================
+ * this area method has receiver type of *rect.
+ * =================================================================
+ */
+func (r *rect) area() int {
+	return r.width * r.height
+}
+
+/**
+ * =================================================================
+ * Methods can be defined for either pointer or value receiver
+ * types. Here's an exampke of a value receiver.
+ * =================================================================
+ */
+func (r rect) perim() int {
+	return 2*r.width + 2*r.height
 }
 
 func main() {
-	/**
-	 * ============================================================
-	 * This syntax creates a new struct.
-	 * ============================================================
-	 */
-	fmt.Println(person{"Bob", 42})
-
-	fmt.Println("=================================================")
+	r := rect{width: 10, height: 5}
 
 	/**
-	 * ============================================================
-	 * You can name the field when initializing a struct.
-	 * ============================================================
+	 * =================================================================
+	 * here we call the  methods defined for our  struct.
+	 * =================================================================
 	 */
-	fmt.Println(person{name: "Alice", age: 30})
-
-	fmt.Println("=================================================")
+	fmt.Println("area:", r.area())
+	fmt.Println("perim:", r.perim())
 
 	/**
-	 * ============================================================
-	 * Omitted field will be zero-value.
-	 * ============================================================
+	 * =================================================================
+	 * Go automatically handles conversion between values and pointers
+	 * for method calls. You may want to use a pointer receiver type
+	 * to avoid copying on method calls or allow the method to
+	 * mutate the receiving struct.
+	 * =================================================================
 	 */
-	fmt.Println(person{name: "Fred"})
-
-	fmt.Println("=================================================")
-
-	/**
-	 * ============================================================
-	 * An & prefix yields a pointer to the struct.
-	 * ============================================================
-	 */
-	fmt.Println(&person{name: "Ann", age: 40})
-
-	fmt.Println("=================================================")
-
-	/**
-	 * ============================================================
-	 * It's idiomatic to encapsulate a new struct creation in
-	 * constructor functions.
-	 * ============================================================
-	 */
-	fmt.Println(newPerson("John"))
-
-	fmt.Println("=================================================")
-
-	/**
-	 * ============================================================
-	 * Access struct fields with a dot.
-	 * ============================================================
-	 */
-	s := person{name: "Sean", age: 50}
-	fmt.Println(s.name)
-
-	fmt.Println("=================================================")
-
-	/**
-	 * ============================================================
-	 * You can also use dots with struct pointers - The pointers
-	 * are automatically derefenced.
-	 *
-	 * Struct are mutable.
-	 * ============================================================
-	 */
-	sp := &s
-	fmt.Println(sp.age)
-	sp.age = 51
-	fmt.Println(sp.age)
+	rp := &r
+	fmt.Println("area:", rp.area())
+	fmt.Println("perim:", rp.perim())
 }
