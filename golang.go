@@ -4,133 +4,89 @@ import "fmt"
 
 func main() {
 	/**
-	 * =================================================
-	 * Slices are a key data type in Go, giving a more
-	 * powerful interface to sequences than arrays.
-	 * =================================================
+	 * ======================================================
+	 * Maps are Go's built-in associative data type
+	 * ======================================================
 	 */
 
 	/**
-	 * =================================================
-	 * Unlike arrays, slices are typed only by the
-	 * elements they contain (not the number of elements).
-	 * To create an empty slice witn*h non-zero length,
-	 * use the buildin 'make'. Here we make a slice of
-	 * 'string's of length 3 (initally zero-valued)
-	 * =================================================
+	 * ======================================================
+	 * To create an empty mapn use the builtin 'make':
+	 * 'make(map[key-type]val-type)'.
+	 * ======================================================
 	 */
-	s := make([]string, 3)
-	fmt.Println("emp:", s)
+	m := make(map[string]int)
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * We can set and get just like with arrays.
-	 * =================================================
+	 * ======================================================
+	 * Set key/value pairs using typical 'name[key] = val'
+	 * syntax.
+	 * ======================================================
 	 */
-	s[0] = "a"
-	s[1] = "b"
-	s[2] = "c"
-	fmt.Println("set:", s)
-	fmt.Println("get:", s[2])
+	m["k1"] = 7
+	m["k2"] = 13
+	fmt.Println("map:", m)
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * 'len' returns the length of the slice as
-	 * expected.
-	 * =================================================
+	 * ======================================================
+	 * get a value for a key with 'name[key]'
+	 * ======================================================
 	 */
-	fmt.Println("len:", len(s))
+	v1 := m["k1"]
+	fmt.Println("v1:", v1)
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * In addtion to these basic operations, slices
-	 * supprot several more that make the richer than
-	 * arrays. One is the buildin 'append", wich returns
-	 * a clice containing one or more new values.
-	 * Note that we need to accept a return value
-	 * from append as we may get a new slice value.
-	 * =================================================
+	 * ======================================================
+	 * The builtin 'len' returns the number of key/value
+	 * pairs when called on a map.
+	 * ======================================================
 	 */
-	s = append(s, "d")
-	s = append(s, "e", "f")
-	fmt.Println("apd:", s)
+	fmt.Println("len:", len(m))
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * Slices can also be 'copy'd. Here we create an
-	 * slice 'c' of the same length as 's' and copy
-	 * into 'c' from 's'.
-	 * =================================================
+	 * ======================================================
+	 * The builtin 'delete' removes key/value pairs from a
+	 * map.
+	 * ======================================================
 	 */
-	c := make([]string, len(s))
-	copy(c, s)
-	fmt.Println("cpy:", c)
+	delete(m, "k2")
+	fmt.Println("map:", m)
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * Slices support a 'slice' operator with the syntax
-	 * 'slice[low:high]'. For example, this gets a slice
-	 * of th elements 's[2]', 's[3]' and 's[4]'
-	 * =================================================
+	 * ======================================================
+	 * The optinal second return value when getting a value
+	 * from a map indicate if the key was present in map.
+	 * This can be used to disambiguate between missin keys
+	 * and keys with zero values like '0' from '""'. Here
+	 * we didn't need the value itself, so we ignored it with
+	 * the blank identifier _.
+	 * ======================================================
 	 */
-	l := s[2:5]
-	fmt.Println("sl1:", l)
+	_, prs := m["k2"]
+	fmt.Println("prs:", prs)
 
-	fmt.Println("====================================================")
+	fmt.Println("=======================================================")
 
 	/**
-	 * =================================================
-	 * This clices up to (but excluding) 's[5]'
-	 * =================================================
+	 * ======================================================
+	 * The optinal second return value when getting a value
+	 * from a map indicate if the key was present in map.
+	 * This can be used to disambiguate between missin keys
+	 * and keys with zero values like '0' from '""'. Here
+	 * we didn't need the value itself, so we ignored it with
+	 * the blank identifier _.
+	 * ======================================================
 	 */
-	l = s[:5]
-	fmt.Println("sl2:", l)
-
-	fmt.Println("====================================================")
-
-	/**
-	 * =================================================
-	 * And this slices up from (and including) 's[2]'
-	 * =================================================
-	 */
-	l = s[2:]
-	fmt.Println("sl3:", l)
-
-	fmt.Println("====================================================")
-
-	/**
-	 * =================================================
-	 * We can declare and initialize a variable
-	 * for slice in a single line as well.
-	 * =================================================
-	 */
-	t := []string{"g", "h", "i"}
-	fmt.Println("dcl:", t)
-
-	fmt.Println("====================================================")
-
-	/**
-	 * =================================================
-	 *
-	 * =================================================
-	 */
-	arr2D := make([][]int, 3)
-	for i := 0; i < 3; i++ {
-		innerLen := i + 1
-		arr2D[i] = make([]int, innerLen)
-		for j := 0; j < innerLen; j++ {
-			arr2D[i][j] = i + j
-		}
-	}
-	fmt.Println("2d:", arr2D)
+	n := map[string]int{"foo": 1, "bar": 2}
+	fmt.Println("map:", n)
 }
