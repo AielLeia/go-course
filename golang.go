@@ -4,72 +4,133 @@ import "fmt"
 
 func main() {
 	/**
-	 * ===============================================
-	 * In Go, an array is a numbered sequence of
-	 * elements of a specific lenght.
-	 * ===============================================
+	 * =================================================
+	 * Slices are a key data type in Go, giving a more
+	 * powerful interface to sequences than arrays.
+	 * =================================================
 	 */
 
 	/**
-	 * ===============================================
-	 * Here we create an array a that wild hold
-	 * exactly 5 ints. The type of elements and
-	 * length are both part of the array's type.
-	 * By default an array is zero-valued, which for
-	 * means 0s.
-	 * ===============================================
+	 * =================================================
+	 * Unlike arrays, slices are typed only by the
+	 * elements they contain (not the number of elements).
+	 * To create an empty slice witn*h non-zero length,
+	 * use the buildin 'make'. Here we make a slice of
+	 * 'string's of length 3 (initally zero-valued)
+	 * =================================================
 	 */
-	var a [5]int
-	fmt.Println("emp:", a)
+	s := make([]string, 3)
+	fmt.Println("emp:", s)
 
-	fmt.Println("============================================")
+	fmt.Println("====================================================")
 
 	/**
-	 * ===============================================
-	 * We can, set a value at an index using the
-	 * 'array[index] = value' syntax, and get
-	 * a value with 'array[index]'
-	 * ===============================================
+	 * =================================================
+	 * We can set and get just like with arrays.
+	 * =================================================
 	 */
-	a[4] = 100
-	fmt.Println("set:", a)
-	fmt.Println("get:", a[4])
+	s[0] = "a"
+	s[1] = "b"
+	s[2] = "c"
+	fmt.Println("set:", s)
+	fmt.Println("get:", s[2])
 
-	fmt.Println("============================================")
+	fmt.Println("====================================================")
 
 	/**
-	 * ===============================================
-	 * the builtin 'len' returns the length of an
-	 * array.
-	 * ===============================================
+	 * =================================================
+	 * 'len' returns the length of the slice as
+	 * expected.
+	 * =================================================
 	 */
-	fmt.Println("len:", len(a))
+	fmt.Println("len:", len(s))
 
-	fmt.Println("============================================")
+	fmt.Println("====================================================")
 
 	/**
-	 * ===============================================
-	 * Use this syntax to declare and initialize an
-	 * array in one line.
-	 * ===============================================
+	 * =================================================
+	 * In addtion to these basic operations, slices
+	 * supprot several more that make the richer than
+	 * arrays. One is the buildin 'append", wich returns
+	 * a clice containing one or more new values.
+	 * Note that we need to accept a return value
+	 * from append as we may get a new slice value.
+	 * =================================================
 	 */
-	b := [5]int{1, 2, 3, 4, 5}
-	fmt.Println("dcl:", b)
+	s = append(s, "d")
+	s = append(s, "e", "f")
+	fmt.Println("apd:", s)
 
-	fmt.Println("============================================")
+	fmt.Println("====================================================")
 
 	/**
-	 * ===============================================
-	 * Array types are one-dimensonal, but you can
-	 * compose types to build multi-dimensional
-	 * data structures.
-	 * ===============================================
+	 * =================================================
+	 * Slices can also be 'copy'd. Here we create an
+	 * slice 'c' of the same length as 's' and copy
+	 * into 'c' from 's'.
+	 * =================================================
 	 */
-	var arr2D [2][3]int
-	for i := 0; i < 2; i++ {
-		for j := 0; j < 3; j++ {
+	c := make([]string, len(s))
+	copy(c, s)
+	fmt.Println("cpy:", c)
+
+	fmt.Println("====================================================")
+
+	/**
+	 * =================================================
+	 * Slices support a 'slice' operator with the syntax
+	 * 'slice[low:high]'. For example, this gets a slice
+	 * of th elements 's[2]', 's[3]' and 's[4]'
+	 * =================================================
+	 */
+	l := s[2:5]
+	fmt.Println("sl1:", l)
+
+	fmt.Println("====================================================")
+
+	/**
+	 * =================================================
+	 * This clices up to (but excluding) 's[5]'
+	 * =================================================
+	 */
+	l = s[:5]
+	fmt.Println("sl2:", l)
+
+	fmt.Println("====================================================")
+
+	/**
+	 * =================================================
+	 * And this slices up from (and including) 's[2]'
+	 * =================================================
+	 */
+	l = s[2:]
+	fmt.Println("sl3:", l)
+
+	fmt.Println("====================================================")
+
+	/**
+	 * =================================================
+	 * We can declare and initialize a variable
+	 * for slice in a single line as well.
+	 * =================================================
+	 */
+	t := []string{"g", "h", "i"}
+	fmt.Println("dcl:", t)
+
+	fmt.Println("====================================================")
+
+	/**
+	 * =================================================
+	 *
+	 * =================================================
+	 */
+	arr2D := make([][]int, 3)
+	for i := 0; i < 3; i++ {
+		innerLen := i + 1
+		arr2D[i] = make([]int, innerLen)
+		for j := 0; j < innerLen; j++ {
 			arr2D[i][j] = i + j
 		}
 	}
-	fmt.Println("2d: ", arr2D)
+	fmt.Println("2d:", arr2D)
 }
