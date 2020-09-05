@@ -4,89 +4,75 @@ import "fmt"
 
 func main() {
 	/**
-	 * ======================================================
-	 * Maps are Go's built-in associative data type
-	 * ======================================================
+	 * ===============================================================
+	 * 'range" iterates over elements in a varity of data structures.
+	 * Let's see how to use 'range' with some of the data structures
+	 * we've already learned
+	 * ===============================================================
 	 */
 
 	/**
-	 * ======================================================
-	 * To create an empty mapn use the builtin 'make':
-	 * 'make(map[key-type]val-type)'.
-	 * ======================================================
+	 * ===============================================================
+	 * Here we use range to sum the numbers in a slice. Arrays
+	 * work like this too.
+	 * ===============================================================
 	 */
-	m := make(map[string]int)
+	nums := []int{2, 3, 4}
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	fmt.Println("sum:", sum)
 
-	fmt.Println("=======================================================")
+	fmt.Println("================================================================")
 
 	/**
-	 * ======================================================
-	 * Set key/value pairs using typical 'name[key] = val'
-	 * syntax.
-	 * ======================================================
+	 * ===============================================================
+	 * 'range' on arrays and slices provides both the index and
+	 * value for each entry. Above we didn't need the index, so we
+	 * ignored it with the blank identifier _. Sometimes we
+	 * actually want the indexes though.
+	 * ===============================================================
 	 */
-	m["k1"] = 7
-	m["k2"] = 13
-	fmt.Println("map:", m)
+	for i, num := range nums {
+		if num == 3 {
+			fmt.Println("index:", i)
+		}
+	}
 
-	fmt.Println("=======================================================")
+	fmt.Println("================================================================")
 
 	/**
-	 * ======================================================
-	 * get a value for a key with 'name[key]'
-	 * ======================================================
+	 * ===============================================================
+	 * 'range' on map iterates over key/value pairs.
+	 * ===============================================================
 	 */
-	v1 := m["k1"]
-	fmt.Println("v1:", v1)
+	kvs := map[string]string{"a": "apple", "b": "banana"}
+	for k, v := range kvs {
+		fmt.Printf("%s -> %s\n", k, v)
+	}
 
-	fmt.Println("=======================================================")
+	fmt.Println("================================================================")
 
 	/**
-	 * ======================================================
-	 * The builtin 'len' returns the number of key/value
-	 * pairs when called on a map.
-	 * ======================================================
+	 * ===============================================================
+	 * 'range' can also iterate over the keys of a map
+	 * ===============================================================
 	 */
-	fmt.Println("len:", len(m))
+	for k := range kvs {
+		fmt.Println("key:", k)
+	}
 
-	fmt.Println("=======================================================")
+	fmt.Println("================================================================")
 
 	/**
-	 * ======================================================
-	 * The builtin 'delete' removes key/value pairs from a
-	 * map.
-	 * ======================================================
+	 * ===============================================================
+	 * 'range' on strings iterates over Unicode code points. The
+	 * first value is the starting byte index of 'rune' and the
+	 * seconde the 'rune' itself.
+	 * ===============================================================
 	 */
-	delete(m, "k2")
-	fmt.Println("map:", m)
-
-	fmt.Println("=======================================================")
-
-	/**
-	 * ======================================================
-	 * The optinal second return value when getting a value
-	 * from a map indicate if the key was present in map.
-	 * This can be used to disambiguate between missin keys
-	 * and keys with zero values like '0' from '""'. Here
-	 * we didn't need the value itself, so we ignored it with
-	 * the blank identifier _.
-	 * ======================================================
-	 */
-	_, prs := m["k2"]
-	fmt.Println("prs:", prs)
-
-	fmt.Println("=======================================================")
-
-	/**
-	 * ======================================================
-	 * The optinal second return value when getting a value
-	 * from a map indicate if the key was present in map.
-	 * This can be used to disambiguate between missin keys
-	 * and keys with zero values like '0' from '""'. Here
-	 * we didn't need the value itself, so we ignored it with
-	 * the blank identifier _.
-	 * ======================================================
-	 */
-	n := map[string]int{"foo": 1, "bar": 2}
-	fmt.Println("map:", n)
+	for i, c := range "go" {
+		fmt.Println(i, c)
+	}
 }
