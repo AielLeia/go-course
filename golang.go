@@ -1,83 +1,75 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "fmt"
 
 func main() {
 	/**
-	 * ==================================================
-	 * Here's a basic switch
-	 * ==================================================
+	 * ===============================================
+	 * In Go, an array is a numbered sequence of
+	 * elements of a specific lenght.
+	 * ===============================================
 	 */
-	i := 2
-	fmt.Print("Write ", i, " as ")
-	switch i {
-	case 1:
-		fmt.Println("one")
-	case 2:
-		fmt.Println("two")
-	case 3:
-		fmt.Println("three")
-	}
-
-	fmt.Println("===================================")
 
 	/**
-	 * ==================================================
-	 * You can use commas to separate multiple
-	 * expression in the same case statement.
-	 * We use the optional 'default' case in this example
-	 * as well.
-	 * ==================================================
+	 * ===============================================
+	 * Here we create an array a that wild hold
+	 * exactly 5 ints. The type of elements and
+	 * length are both part of the array's type.
+	 * By default an array is zero-valued, which for
+	 * means 0s.
+	 * ===============================================
 	 */
-	switch time.Now().Weekday() {
-	case time.Saturday, time.Sunday:
-		fmt.Println("It's the weekend")
-	default:
-		fmt.Println("It's a weekday")
-	}
+	var a [5]int
+	fmt.Println("emp:", a)
 
-	fmt.Println("===================================")
+	fmt.Println("============================================")
 
 	/**
-	 * ==================================================
-	 * 'switch' without an expression is an alternate
-	 * way to express if/else logic.
-	 * Here we also show the 'case" expressions can
-	 * be non-contante
-	 * ==================================================
+	 * ===============================================
+	 * We can, set a value at an index using the
+	 * 'array[index] = value' syntax, and get
+	 * a value with 'array[index]'
+	 * ===============================================
 	 */
-	t := time.Now()
-	switch {
-	case t.Hour() < 12:
-		fmt.Println("It's before noon")
-	default:
-		fmt.Println("It's after noon")
-	}
+	a[4] = 100
+	fmt.Println("set:", a)
+	fmt.Println("get:", a[4])
 
-	fmt.Println("===================================")
+	fmt.Println("============================================")
 
 	/**
-	 * ==================================================
-	 * A type 'switch' compare types instead of values.
-	 * You can use this to discover the type of an
-	 * interface value. In this example, the variable
-	 * t will have type corresponding to its clause.
-	 * ==================================================
+	 * ===============================================
+	 * the builtin 'len' returns the length of an
+	 * array.
+	 * ===============================================
 	 */
-	whatAmI := func(i interface{}) {
-		switch t := i.(type) {
-		case bool:
-			fmt.Println("I'm a bool")
-		case int:
-			fmt.Println("I'm an int")
-		default:
-			fmt.Printf("Don't know type %T\n", t)
+	fmt.Println("len:", len(a))
+
+	fmt.Println("============================================")
+
+	/**
+	 * ===============================================
+	 * Use this syntax to declare and initialize an
+	 * array in one line.
+	 * ===============================================
+	 */
+	b := [5]int{1, 2, 3, 4, 5}
+	fmt.Println("dcl:", b)
+
+	fmt.Println("============================================")
+
+	/**
+	 * ===============================================
+	 * Array types are one-dimensonal, but you can
+	 * compose types to build multi-dimensional
+	 * data structures.
+	 * ===============================================
+	 */
+	var arr2D [2][3]int
+	for i := 0; i < 2; i++ {
+		for j := 0; j < 3; j++ {
+			arr2D[i][j] = i + j
 		}
 	}
-	whatAmI(true)
-	whatAmI(1)
-	whatAmI("hey")
+	fmt.Println("2d: ", arr2D)
 }
