@@ -2,38 +2,48 @@ package main
 
 import "fmt"
 
-/**
- * ====================================================================
- * Here's a function that will take an arbitrary number of 'int's
- * as arguments.
- * ====================================================================
- */
-func sum(nums ...int) {
-	fmt.Print(nums, " ")
-	total := 0
-	for _, num := range nums {
-		total += num
+func intSeq() func() int {
+	/**
+	 * ==============================================================
+	 * This function 'intSeq' returns another function, which we
+	 * define anonymously in the body of 'intSeq'. The returned
+	 * function closes over the variable i to from a closure.
+	 * ==============================================================
+	 */
+	var i int = 0
+	return func() int {
+		i++
+		return i
 	}
-	fmt.Println(total)
 }
 
 func main() {
 	/**
-	 * ====================================================================
-	 * Variadic functions can be called in the usual way with individual
-	 * arguments.
-	 * ====================================================================
+	 * ==============================================================
+	 * We call 'intSeq', assigning the result (a function) to nextInt.
+	 * This function value captures its own i value, which will be
+	 * updated each time we call 'nextInt'
+	 * ==============================================================
 	 */
-	sum(1, 2)
-	sum(1, 2, 3)
+	nextInt := intSeq()
 
-	fmt.Println("========================================================")
 	/**
-	 * ====================================================================
-	 * If you already have multiple args in a slicen apply them to a
-	 * variadic function using 'func(slice...)'
-	 * ====================================================================
+	 * ==============================================================
+	 * See the effect of the closure by calling 'nextInt' a few times.
+	 * ==============================================================
 	 */
-	nums := []int{1, 2, 3, 4}
-	sum(nums...)
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+	fmt.Println(nextInt())
+
+	fmt.Println("=================================================")
+
+	/**
+	 * ==============================================================
+	 * To confirm that the state is unique to that particular
+	 * function, create and test a new one.
+	 * ==============================================================
+	 */
+	newInts := intSeq()
+	fmt.Println(newInts())
 }
