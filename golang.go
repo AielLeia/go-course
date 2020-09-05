@@ -5,55 +5,51 @@ import "fmt"
 func main() {
 	/**
 	 * ==================================
-	 * The most basic type,
-	 * with a single condition
+	 * Here's a basic example
 	 * ==================================
 	 */
-	i := 1
-	for i <= 3 {
-		fmt.Println(i)
-		i++
+	if 7%2 == 0 {
+		fmt.Println("7 is even")
+	} else {
+		fmt.Println("7 is odd")
 	}
 
 	fmt.Println("===================================")
 
 	/**
 	 * ==================================
-	 * A classic inital/condition/after
-	 * 'for' loop
+	 * You can have an 'if' statement
+	 * without an else
 	 * ==================================
 	 */
-	for j := 7; j <= 9; j++ {
-		fmt.Println(j)
+	if 8%4 == 0 {
+		fmt.Println("8 is divisible by 4")
 	}
 
 	fmt.Println("===================================")
 
 	/**
 	 * ==================================
-	 * 'for' without a conditon will loop
-	 * repeatedly until you 'break' out
-	 * of teh loop or 'return" from
-	 * the enclosing funtion
+	 * A statement can precede
+	 * conditionals; any variables
+	 * declared in this statement are
+	 * available in all branch
 	 * ==================================
 	 */
-	for {
-		fmt.Println("loop")
-		break
+	if num := 9; num < 0 {
+		fmt.Println(num, "is negative")
+	} else if num < 10 {
+		fmt.Println(num, "has 1 digit")
+	} else {
+		fmt.Println(num, "has multiple digits")
 	}
-
-	fmt.Println("===================================")
 
 	/**
 	 * ==================================
-	 * You can also 'continue" to the
-	 * next iteration of the loop
+	 * Note that you don't need
+	 * parentheses around confitions in
+	 * Go, but that the braces are
+	 * required
 	 * ==================================
 	 */
-	for n := 0; n <= 5; n++ {
-		if n%2 == 0 {
-			continue
-		}
-		fmt.Println(n)
-	}
 }
