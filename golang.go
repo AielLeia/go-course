@@ -1,34 +1,51 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	"./libs/tree"
+)
+
+func walk(t *tree.Tree, ch chan int) {
+	recWalk(t, ch)
+	close(ch)
+}
+
+func recWalk(t *tree.Tree, ch chan int) {
+	if t != nil {
+		recWalk(t.Left, ch)
+		ch <- t.Value
+		recWalk(t.Right, ch)
+	}
+}
+
+func same(t1 *tree.Tree, t2 *tree.Tree) bool {
+	ch1 := make(chan int)
+	ch2 := make(chan int)
+	go walk(t1, ch1)
+	go walk(t2, ch2)
+
+	for {
+		x1, ok1 := <-ch1
+		x2, ok2 := <-ch2
+		switch {
+		case ok1 != ok2:
+			return false
+		case !ok1 && !ok2:
+			return true
+		case x1 != x2:
+			return false
+		default:
+		}
+	}
+}
 
 func main() {
-	/**
-	 * ===============================================================
-	 * In a previous example we saw how for and range provide
-	 * iteration over basic data structures. We ca, also use this
-	 * syntax to iterate over values recieved from a channel.
-	 * ===============================================================
-	 */
-
-	/**
-	 * ===============================================================
-	 * We'll iterate over 2 values in the queue channel.
-	 * ===============================================================
-	 */
-	queue := make(chan string, 2)
-	queue <- "one"
-	queue <- "two"
-	close(queue)
-
-	/**
-	 * ===============================================================
-	 * This range iterates over each element as it's received from
-	 * queue. Because we closed the channel abose, the iteration
-	 * terminates after receiving the 2 elements.
-	 * ===============================================================
-	 */
-	for elem := range queue {
-		fmt.Println(elem)
+	ch := make(chan int)
+	go walk(tree.New(1), ch)
+	for v := range ch {
+		fmt.Println(v)
 	}
+	fmt.Println(same(tree.New(1), tree.New(1)))
+	fmt.Println(same(tree.New(1), tree.New(2)))
 }
