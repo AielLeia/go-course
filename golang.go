@@ -1,53 +1,47 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
-func f(from string) {
-	for i := 0; i < 3; i++ {
-		fmt.Println(from, ":", i)
-	}
-}
+import "fmt"
 
 func main() {
 	/**
-	 * ===================================================
-	 * Suppose we have a function call f(s). Here's how
-	 * we'd call that in the usual way, running it
-	 * synchronously.
-	 * ===================================================
+	 * ======================================================
+	 * Create a new channel with make(chan val-type). Channels
+	 * are typed by the values the convey.
+	 * ======================================================
 	 */
-	f("direct")
+	messages := make(chan string)
 
 	/**
-	 * ===================================================
-	 * To invoke this function in a goroutine, use go f(s)
-	 * This new goroutine will execute concurrently with
-	 * the calling on.
-	 * ===================================================
+	 * ======================================================
+	 * Send a value into channel using the channel <- syntax.
+	 * Here we send ping to the message channel we made
+	 * above, from a new goroutine.
+	 * ======================================================
 	 */
-	go f("goroutine")
+	go func() {
+		messages <- "ping"
+	}()
 
 	/**
-	 * ===================================================
-	 * You can also start a goroutine for an anonymous
-	 * function call.
-	 * ===================================================
+	 * ======================================================
+	 * The <- channel syntyax receives a value from the
+	 * channel. Here we'll receive the ping message we sent
+	 * above and print it out.
+	 * ======================================================
 	 */
-	go func(msg string) {
-		fmt.Println(msg)
-	}("going")
+	msg := <-messages
+	fmt.Println(msg)
 
 	/**
-	 * ===================================================
-	 * When we run this program, we see the output of
-	 * the blocking call first, the the interleaved output
-	 * of the tw goroutines. This interleaving reflect
-	 * teh routines being run concurrently by Go runtinme.
-	 * ===================================================
+	 * ======================================================
+	 * When we run the program the ping message is
+	 * successfully passed from one goroutine to another via
+	 * our channel.
+	 *
+	 * By default sends and reveives block until both the
+	 * sender and receiver are ready. This property allowed
+	 * us to wait at the end of our program for the ping
+	 * message without having to use any other syncronization.
+	 * ======================================================
 	 */
-	time.Sleep(time.Second)
-	fmt.Println("Done")
 }
