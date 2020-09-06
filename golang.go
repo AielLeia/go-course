@@ -4,44 +4,36 @@ import "fmt"
 
 func main() {
 	/**
-	 * ======================================================
-	 * Create a new channel with make(chan val-type). Channels
-	 * are typed by the values the convey.
-	 * ======================================================
+	 * ===========================================================
+	 * By default channels are unbuffered, meaning that the will
+	 * only accept sends (chan <-) if there is a corresponding
+	 * receive (chan <-) ready to receive the sen value. Buffurred
+	 * channels accept a limited number of value without a
+	 * corresponding receiver for those values.
+	 * ===========================================================
 	 */
-	messages := make(chan string)
 
 	/**
-	 * ======================================================
-	 * Send a value into channel using the channel <- syntax.
-	 * Here we send ping to the message channel we made
-	 * above, from a new goroutine.
-	 * ======================================================
+	 * ===========================================================
+	 * Here we make a channel of strings buffering up to 2 values.
+	 * ===========================================================
 	 */
-	go func() {
-		messages <- "ping"
-	}()
+	messages := make(chan string, 2)
 
 	/**
-	 * ======================================================
-	 * The <- channel syntyax receives a value from the
-	 * channel. Here we'll receive the ping message we sent
-	 * above and print it out.
-	 * ======================================================
+	 * ===========================================================
+	 * Because this channel is buffered, we can send these values
+	 * into the channel without a corresponding concurrent receive.
+	 * ===========================================================
 	 */
-	msg := <-messages
-	fmt.Println(msg)
+	messages <- "buffered"
+	messages <- "channel"
 
 	/**
-	 * ======================================================
-	 * When we run the program the ping message is
-	 * successfully passed from one goroutine to another via
-	 * our channel.
-	 *
-	 * By default sends and reveives block until both the
-	 * sender and receiver are ready. This property allowed
-	 * us to wait at the end of our program for the ping
-	 * message without having to use any other syncronization.
-	 * ======================================================
+	 * ===========================================================
+	 * Later we can receive the two values as usual.
+	 * ===========================================================
 	 */
+	fmt.Println(<-messages)
+	fmt.Println(<-messages)
 }
