@@ -1,41 +1,55 @@
 package main
 
-import "fmt"
-
-/**
- * =============================================================
- * This ping functin only accepts a channel for sending values.
- * It would be a compile time error to try to receive on this
- * channel.
- * =============================================================
- */
-func ping(pings chan<- string, msg string) {
-	pings <- msg
-}
-
-/**
- * =============================================================
- * the pong function accepts one channel for receives (pings)
- * and a second for sends (pongs).
- * =============================================================
- */
-func pong(pings <-chan string, pongs chan<- string) {
-	msg := <-pings
-	pongs <- msg
-}
+import (
+	"fmt"
+	"time"
+)
 
 func main() {
 	/**
 	 * =============================================================
-	 * When using channels as funcion parameters, you can specify if
-	 * a channel is meant to only send or receive values. This
-	 * specificity increases the type safety of the program.
+	 * Go's select lets you wait on multiple channel operations.
+	 * Combining goroutines and channels with select is a powerful
+	 * feature of Go.
 	 * =============================================================
 	 */
 
-	pings := make(chan string, 1)
-	pongs := make(chan string, 1)
-	ping(pings, "passed message")
-	pong(pings, pongs)
-	fmt.Println(<-pongs)
+	/**
+	 * =============================================================
+	 * For our example we'll select across two channels.
+	 * =============================================================
+	 */
+	var c1 chan string = make(chan string)
+	var c2 chan string = make(chan string)
+
+	/**
+	 * =============================================================
+	 * Each channel will receive a value after some amount of time,
+	 * to simulate e.g blocking RPC operations execution in concirent
+	 * goroutines.
+	 * =============================================================
+	 */
+	go func() {
+		time.Sleep(time.Second)
+		c1 <- "one"
+	}()
+	go func() {
+		time.Sleep(2 * time.Second)
+		c2 <- "two"
+	}()
+
+	/**
+	 * =============================================================
+	 * We'all use select to await both of these values
+	 * simultaneously, printing each one as it arrives.
+	 * =============================================================
+	 */
+	for i := 0; i < 2; i++ {
+		select {
+		case msg1 := <-c1:
+			fmt.Println("received", msg1)
+		case msg2 := <-c2:
+			fmt.Println("received", msg2)
+		}
+	}
 }
