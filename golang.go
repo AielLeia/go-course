@@ -1,57 +1,41 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
+import "fmt"
 
 /**
  * =============================================================
- * This is the function we'll run in a goroutine. The done
- * channel will be used to notify another goroutine that this
- * function's work is done.
+ * This ping functin only accepts a channel for sending values.
+ * It would be a compile time error to try to receive on this
+ * channel.
  * =============================================================
  */
-func worker(done chan bool) {
+func ping(pings chan<- string, msg string) {
+	pings <- msg
+}
 
-	fmt.Print("working...")
-	time.Sleep(time.Second * 2)
-	fmt.Println("done")
-
-	/**
-	 * =============================================================
-	 * Send a valuen to notify the we're done.
-	 * =============================================================
-	 */
-	done <- true
+/**
+ * =============================================================
+ * the pong function accepts one channel for receives (pings)
+ * and a second for sends (pongs).
+ * =============================================================
+ */
+func pong(pings <-chan string, pongs chan<- string) {
+	msg := <-pings
+	pongs <- msg
 }
 
 func main() {
 	/**
 	 * =============================================================
-	 * We can use channels to synchronize execution across goroutine
-	 * Here's an example of using a blocking receive to wait for
-	 * goroutine to finish. When waiting for multiple goroutine
-	 * to finish, yous may prefer to use a WaitGroup.
+	 * When using channels as funcion parameters, you can specify if
+	 * a channel is meant to only send or receive values. This
+	 * specificity increases the type safety of the program.
 	 * =============================================================
 	 */
 
-	/**
-	 * =============================================================
-	 * Start a worker goroutine, giving it the channel to notify on.
-	 * =============================================================
-	 */
-	var done chan bool = make(chan bool, 1)
-	go worker(done)
-
-	/**
-	 * =============================================================
-	 * Block until we receice a notification from the worker on the
-	 * channel.
-	 *
-	 * If you removed the <- done line from this program, the
-	 * program would exit before the worker even started.
-	 * =============================================================
-	 */
-	<-done
+	pings := make(chan string, 1)
+	pongs := make(chan string, 1)
+	ping(pings, "passed message")
+	pong(pings, pongs)
+	fmt.Println(<-pongs)
 }
