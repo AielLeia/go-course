@@ -1,39 +1,57 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"time"
+)
+
+/**
+ * =============================================================
+ * This is the function we'll run in a goroutine. The done
+ * channel will be used to notify another goroutine that this
+ * function's work is done.
+ * =============================================================
+ */
+func worker(done chan bool) {
+
+	fmt.Print("working...")
+	time.Sleep(time.Second * 2)
+	fmt.Println("done")
+
+	/**
+	 * =============================================================
+	 * Send a valuen to notify the we're done.
+	 * =============================================================
+	 */
+	done <- true
+}
 
 func main() {
 	/**
-	 * ===========================================================
-	 * By default channels are unbuffered, meaning that the will
-	 * only accept sends (chan <-) if there is a corresponding
-	 * receive (chan <-) ready to receive the sen value. Buffurred
-	 * channels accept a limited number of value without a
-	 * corresponding receiver for those values.
-	 * ===========================================================
+	 * =============================================================
+	 * We can use channels to synchronize execution across goroutine
+	 * Here's an example of using a blocking receive to wait for
+	 * goroutine to finish. When waiting for multiple goroutine
+	 * to finish, yous may prefer to use a WaitGroup.
+	 * =============================================================
 	 */
 
 	/**
-	 * ===========================================================
-	 * Here we make a channel of strings buffering up to 2 values.
-	 * ===========================================================
+	 * =============================================================
+	 * Start a worker goroutine, giving it the channel to notify on.
+	 * =============================================================
 	 */
-	messages := make(chan string, 2)
+	var done chan bool = make(chan bool, 1)
+	go worker(done)
 
 	/**
-	 * ===========================================================
-	 * Because this channel is buffered, we can send these values
-	 * into the channel without a corresponding concurrent receive.
-	 * ===========================================================
+	 * =============================================================
+	 * Block until we receice a notification from the worker on the
+	 * channel.
+	 *
+	 * If you removed the <- done line from this program, the
+	 * program would exit before the worker even started.
+	 * =============================================================
 	 */
-	messages <- "buffered"
-	messages <- "channel"
-
-	/**
-	 * ===========================================================
-	 * Later we can receive the two values as usual.
-	 * ===========================================================
-	 */
-	fmt.Println(<-messages)
-	fmt.Println(<-messages)
+	<-done
 }
