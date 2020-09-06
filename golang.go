@@ -1,50 +1,85 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
-type rect struct {
-	width, height int
+/**
+ * ======================================================
+ * Here's basic interface for geometric shapes.
+ * ======================================================
+ */
+type geometry interface {
+	area() float64
+	perim() float64
 }
 
 /**
- * =================================================================
- * this area method has receiver type of *rect.
- * =================================================================
+ * ======================================================
+ * For our example we'll implement this interface
+ * on rect and circle types.
+ * ======================================================
  */
-func (r *rect) area() int {
+type rect struct {
+	width, height float64
+}
+type circle struct {
+	radius float64
+}
+
+/**
+ * ======================================================
+ * To implement an interface in Go, we just need to
+ * implement all the methods in the interface. here
+ * we implement geometry on rects.
+ * ======================================================
+ */
+func (r rect) area() float64 {
 	return r.width * r.height
 }
-
-/**
- * =================================================================
- * Methods can be defined for either pointer or value receiver
- * types. Here's an exampke of a value receiver.
- * =================================================================
- */
-func (r rect) perim() int {
+func (r rect) perim() float64 {
 	return 2*r.width + 2*r.height
 }
 
+/**
+ * ======================================================
+ * The implementation for circles.
+ * ======================================================
+ */
+func (c circle) area() float64 {
+	return math.Pi * c.radius * c.radius
+}
+func (c circle) perim() float64 {
+	return 2 * math.Pi * c.radius
+}
+
+/**
+ * ======================================================
+ * If a variable has an interface type, then we can call
+ * methods that are in the named interface. Here's a
+ * generic measure function taking advantage of this
+ * to work on any geometry.
+ * ======================================================
+ */
+func measure(g geometry) {
+	fmt.Println(g)
+	fmt.Println(g.area())
+	fmt.Println(g.perim())
+}
+
 func main() {
-	r := rect{width: 10, height: 5}
+	r := rect{width: 3, height: 4}
+	c := circle{radius: 5}
 
 	/**
-	 * =================================================================
-	 * here we call the  methods defined for our  struct.
-	 * =================================================================
+	 * ======================================================
+	 * The circle and rect structure types both implement
+	 * the geometry interface so we can use instances of
+	 * these structs as arfuments to measure.
+	 * ======================================================
 	 */
-	fmt.Println("area:", r.area())
-	fmt.Println("perim:", r.perim())
-
-	/**
-	 * =================================================================
-	 * Go automatically handles conversion between values and pointers
-	 * for method calls. You may want to use a pointer receiver type
-	 * to avoid copying on method calls or allow the method to
-	 * mutate the receiving struct.
-	 * =================================================================
-	 */
-	rp := &r
-	fmt.Println("area:", rp.area())
-	fmt.Println("perim:", rp.perim())
+	measure(r)
+	fmt.Println("====================================================")
+	measure(c)
 }
